@@ -13,9 +13,9 @@ class Pancake
     @secret = secret
   end
   
-  def find_lines(regex, offset=0, limit=0) 
+  def find_lines(regex, offset=0, limit=0, starttime=0, endtime=0) 
     regex = regex.inspect[1..-2]
-    Pancake.get("/#{@username}/#{@application_name}", :query=>{:secret=>@secret, :regex=>regex, :offset=>offset, :limit=>limit}).parsed_response
+    Pancake.get("/#{@username}/#{@application_name}", :query=>{:secret=>@secret, :regex=>regex, :offset=>offset, :limit=>limit, :starttime=>starttime, :endtime=>endtime}).parsed_response
   end
   
   def add_lines(lines)
@@ -60,6 +60,6 @@ pancake = Pancake.new('ndnichols', 'wondew', 'b')
 # puts pancake.remove_tags(/.*/, '#done', 1, 2).inspect
 # puts pancake.modify_lines('^First something again[^#]*', '$& #done ').inspect #adds #done
 # puts pancake.modify_lines('^First something again.*?(#done).*?', "$1").inspect #removes #done
-puts pancake.find_lines(/.*/, 1, 10).inspect
+puts pancake.find_lines('', 0, 0, 1277842090247, 0).inspect
 # puts pancake.delete_lines(/.*/).inspect
 # puts pancake.replace_lines(['This', 'is', 'it.'])

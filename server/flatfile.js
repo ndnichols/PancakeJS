@@ -51,6 +51,7 @@ function hasPermissions(permissions, secret, permission_type) {
 function parseLine(line) {
     //Takes a like like "Hey, my name is nate #modified(1471) #foo(bar) #baz" and returns
     //{'original_text':(the text), 'text', 'tags':{'modified':1471, 'foo':'bar', 'baz':undefined}}
+    sys.puts('parsing ' + line);
     var ret = {'original_text':line, 'tags':{}};
     var tag_regex = / #([\w]+)(\([\w\d\.]+\))?/g;
     while (true) {
@@ -59,9 +60,16 @@ function parseLine(line) {
             ret.text = ret.text || line;
             break;
         }
+        // sys.puts(sys.inspect(match));
         ret.text = ret.text || line.slice(0, match.index);
         ret.tags[match[1]] = match[2] ? match[2].slice(1, match[2].length-1) : true;
     }
+    if (!ret.tags.modified) {
+        return parseLine(line);//There's some race condition or something going on here, so if we don't get a modified back, we try again
+    }
+    // sys.puts(ret.tags.modified);
+    // sys.puts(parseInt(ret.tags.modified, 10));
+    // sys.puts('Parsed ' + line + '\n to \n' + sys.inspect(ret));
     return ret;
 }
 
@@ -130,7 +138,21 @@ exports.executeOnFile = function(f, path, secret, args, response_callback) {
 }
 
 exports.findAllInFile = function(path, secret, args, response_callback) {
-    var regex = new RegExp(args.regex);
+    var test;
+    if (args.regex) {
+        var regex = new RegExp(args.regex);
+        test = function(line) {return line.match(regex);}
+    }
+    else {
+        var starttime = args.starttime ? parseInt(args.starttime, 10) : 0;
+        args.endtime = args.endtime || '0'; //blech
+        var endtime = parseInt(args.endtime, 10) || 4200000000000;
+        test = function(line) {
+            var modified = parseInt(parseLine(line).tags.modified, 10);
+            sys.puts('testing modified ' + modified + ' against starttime ' + starttime + ' and endtime '+ endtime);
+            return ((modified > starttime) && (modified < endtime));
+        };
+    }
     var ret = []
     fs.readFile(path, 'utf8', function(err, data) {
         if (!data) return;
@@ -145,7 +167,7 @@ exports.findAllInFile = function(path, secret, args, response_callback) {
                 continue;
             }
             var line = lines[i];
-            if (line.match(regex)) {
+            if (test(line)) {//.match(regex)) {
                 ret.push(parseLine(line));
             }
             if ((args.limit) && (ret.length == args.limit)) {
