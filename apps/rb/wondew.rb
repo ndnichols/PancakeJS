@@ -2,7 +2,7 @@
 
 #Manages conversion to and from a .wondew and .txt file
 
-require '../../client/pancake.rb'
+require '/Users/nate/Programming/PancakeJS/client/pancake.rb'
 require 'ftools'
 
 Username = 'ndnichols'
