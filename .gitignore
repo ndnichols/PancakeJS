@@ -1,3 +1,5 @@
 *.tmproj
 data/
 apps/iOS/build/
+apps/iOS/Wondew.xcodeproj/nate.pbxuser
+apps/iOS/Wondew.xcodeproj/nate.mode1v3
