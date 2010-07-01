@@ -7,11 +7,12 @@ var PERM_READ = 1,
     PERM_DELETE = 3;
     
 var modified_regex = /#modified\([\d]+\)/;
+var tag_regex = / #([\w]+)(\(.*?\))?/g;
     
 function removeTag(line, tag) {
     var tagname = tag.split('(')[0];
     var tag_regex = new RegExp(' ' + tagname + '(?:\\(.*?\\))?');
-    sys.puts('tag_regex is ' + tag_regex);
+    // sys.puts('tag_regex is ' + tag_regex);
     return line.replace(tag_regex, '');
 }
 
@@ -21,55 +22,52 @@ function setTag(line, tag) {
         tag = '#' + tag;
     }
     var exists_regex = new RegExp(tag + '[ $]');
-    sys.puts('exists_regex is ' + exists_regex + ' and i\'m testing against' + line);
+    // sys.puts('exists_regex is ' + exists_regex + ' and i\'m testing against' + line);
     if (line.match(exists_regex)) {
-        sys.puts('yep it matched!');
+        // sys.puts('yep it matched!');
         return line;
     }
-    sys.puts('and it didnt match!');
+    // sys.puts('and it didnt match!');
     line = removeTag(line, tag);
     return line + ' ' + tag;
 }
 
 function updateTimestamp(line) {
-    var new_modified = "#modified(" + (new Date).getTime() + ")";
+    var new_modified = "#modified(" + parseInt((new Date).getTime() / 1000) + ")";
     return setTag(line, new_modified);
 }
     
 function hasPermissions(permissions, secret, permission_type) {
     var permissions = permissions.split('|');
-    var match_string = permissions[permission_type];// || permissions[0];
-    if (('/' == match_string[0]) && ('/' == match_string[match_string.length - 1])) {
+    var match_string = permissions[permission_type];
+    if ((match_string.length > 2) && ('/' == match_string[0]) && ('/' == match_string[match_string.length - 1])) {
         match_string = new RegExp(match_string.slice(1, match_string.length - 1));
         return secret.match(match_string) || secret == permissions[0];
     }
     else {
-        return secret == match_string || secret == permissions[0];
+        return secret == match_string || secret == permissions[0] || !permissions[0];
     }
 }
 
 function parseLine(line) {
     //Takes a like like "Hey, my name is nate #modified(1471) #foo(bar) #baz" and returns
     //{'original_text':(the text), 'text', 'tags':{'modified':1471, 'foo':'bar', 'baz':undefined}}
-    sys.puts('parsing ' + line);
+    tag_regex.lastIndex = 0;
     var ret = {'original_text':line, 'tags':{}};
-    var tag_regex = / #([\w]+)(\([\w\d\.]+\))?/g;
     while (true) {
         var match = tag_regex.exec(line);
         if (!match) {
-            ret.text = ret.text || line;
             break;
         }
-        // sys.puts(sys.inspect(match));
-        ret.text = ret.text || line.slice(0, match.index);
+        if (ret.text == undefined) {
+            ret.text = line.slice(0, match.index);
+        }
         ret.tags[match[1]] = match[2] ? match[2].slice(1, match[2].length-1) : true;
     }
     if (!ret.tags.modified) {
+        sys.puts('fucked up, going through again!! on ' + line);
         return parseLine(line);//There's some race condition or something going on here, so if we don't get a modified back, we try again
     }
-    // sys.puts(ret.tags.modified);
-    // sys.puts(parseInt(ret.tags.modified, 10));
-    // sys.puts('Parsed ' + line + '\n to \n' + sys.inspect(ret));
     return ret;
 }
 
@@ -101,7 +99,6 @@ function modifyLines(path, secret, args, response_callback, modifyLine) {
                 new_lines.push(new_line);                
             }
             else {
-                sys.puts('breaking because of limit');
                 new_lines.push(lines[i]);//Push original once we hit limit
             }
         }
@@ -146,10 +143,11 @@ exports.findAllInFile = function(path, secret, args, response_callback) {
     else {
         var starttime = args.starttime ? parseInt(args.starttime, 10) : 0;
         args.endtime = args.endtime || '0'; //blech
-        var endtime = parseInt(args.endtime, 10) || 4200000000000;
+        var endtime = parseInt(args.endtime, 10) || 4200000000;
+        sys.puts('starttime is ' + starttime + ' and endtime is ' + endtime);
         test = function(line) {
             var modified = parseInt(parseLine(line).tags.modified, 10);
-            sys.puts('testing modified ' + modified + ' against starttime ' + starttime + ' and endtime '+ endtime);
+            // sys.puts('ok ' + parseLine(line).tags.modified);
             return ((modified > starttime) && (modified < endtime));
         };
     }
@@ -174,22 +172,21 @@ exports.findAllInFile = function(path, secret, args, response_callback) {
                 break;
             }
         }
+        sys.puts('Going to return ' + ret.length + ' results from find!');
         response_callback(200, {'status':'ok', 'results':ret});
     });    
 }
 
 exports.appendToFile = function(path, secret, args, response_callback) {
-    sys.puts('in AppendToFile!!');
     var lines = args.lines;
     for (var i = 0; i < lines.length; i++) {
         lines[i] = updateTimestamp(lines[i]);
     }
     var text = lines.join('\n') + '\n';
     var buff = new Buffer(text, 'utf8');
-    sys.puts('made buffer!');
     fs.open(path, 'r', 0777, function(error, fd) {
         var perm_buff = new Buffer(255);
-        fs.readSync(fd, perm_buff, 0, 255, null);
+        // fs.readSync(fd, perm_buff, 0, 255, null);
         fs.read(fd, perm_buff, 0, 255, null, function (error, bytesRead) {
             var permissions = perm_buff.toString('utf8', 0, bytesRead);
             permissions = permissions.slice(0, permissions.indexOf('\n'));
@@ -316,6 +313,6 @@ exports.removeTags = function(path, secret, args, response_callback) {
 
 
 if (module.id == require.main.id) {
-    var s = 'Foo bar #modified(1001) #other(stuff) #baz';
-    sys.puts(sys.inspect(updateTimestamp(s)));//, '#modified(yes)')));
+    var s = 'Order more checks #done(2010-07-01) #project(Today) #modified(1277996688)';
+    sys.puts(sys.inspect(parseLine(s)));//, '#modified(yes)')));
 }

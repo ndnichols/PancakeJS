@@ -41,13 +41,18 @@ var server = http.createServer(function(req, res) {
     	res.end();
     	return;
     }
+    
+    // sys.puts('Request is ' + sys.inspect(parsed_req));
 
     var username = path.split('/')[1];
     var application_name = path.split('/')[2];
-    var args = parsed_req.query;
+    var args = parsed_req.query || {};
+
     var secret = args['secret'];
     args.limit = args.limit ? parseInt(args.limit, 10) : 0; //a lot of flatfile.js uses limit and offset
     args.offset = args.offset ? parseInt(args.offset, 10) : 0;
+    args.regex = args.regex || ''
+
     sys.puts('args is ' + sys.inspect(args));
     var filename = base_dir + '/' + username + '/' + application_name + '.txt';
     
