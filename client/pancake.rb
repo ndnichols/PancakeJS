@@ -5,7 +5,7 @@ require 'json'
 class Pancake
   include HTTParty
   format :json
-  base_uri 'localhost:8080'
+  base_uri 'ftaires.com:8042'
   
   def initialize(username, application_name, secret)
     @username = username

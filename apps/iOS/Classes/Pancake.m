@@ -26,7 +26,7 @@
 
 
 -(void)load {
-    NSURL *url = [NSURL URLWithString:@"http://localhost:8080/ndnichols/wondew?secret=angeles&regex=.*"];
+    NSURL *url = [NSURL URLWithString:@"http://ftaires.com:8042/ndnichols/wondew?secret=angeles&regex=.*"];
     ASIHTTPRequest *request = [ASIHTTPRequest requestWithURL:url];
     request.didFinishSelector = @selector(getRequestDidFinish:);
     [request setDelegate: self];
@@ -99,7 +99,7 @@
 
     NSString *lines = [[NSArray arrayWithObject:text] JSONRepresentation];
     lines = [self stringByURLEscapingString:lines];
-    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"http://localhost:8080/ndnichols/wondew/append_lines?secret=angeles&lines=%@", lines, nil]];
+    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"http://ftaires.com:8042/ndnichols/wondew/append_lines?secret=angeles&lines=%@", lines, nil]];
     ASIFormDataRequest *request = [ASIFormDataRequest requestWithURL:url];
     [request setRequestMethod:@"POST"];
     request.delegate = self;

@@ -53,7 +53,7 @@ var server = http.createServer(function(req, res) {
     args.offset = args.offset ? parseInt(args.offset, 10) : 0;
     args.regex = args.regex || ''
 
-    sys.puts('args is ' + sys.inspect(args));
+    // sys.puts('args is ' + sys.inspect(args));
     var filename = base_dir + '/' + username + '/' + application_name + '.txt';
     
     switch(req.method) {

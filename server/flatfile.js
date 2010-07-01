@@ -65,7 +65,6 @@ function parseLine(line) {
         ret.tags[match[1]] = match[2] ? match[2].slice(1, match[2].length-1) : true;
     }
     if (!ret.tags.modified) {
-        sys.puts('fucked up, going through again!! on ' + line);
         return parseLine(line);//There's some race condition or something going on here, so if we don't get a modified back, we try again
     }
     return ret;
