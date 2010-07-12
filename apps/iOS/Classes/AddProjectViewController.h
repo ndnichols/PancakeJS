@@ -18,5 +18,6 @@
 @property (nonatomic, retain) IBOutlet UITextView *wondewTextView;
 
 -(IBAction)addProject;
+-(IBAction)cancel;
 
 @end

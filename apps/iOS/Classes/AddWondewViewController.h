@@ -11,10 +11,16 @@
 
 @interface AddWondewViewController : UIViewController {
     UITextView *wondewTextView;
+    NSString *currProjectTitle;
+    UILabel *currProjectLabel;
 }
 
 @property (nonatomic, retain) IBOutlet UITextView *wondewTextView;
+@property (nonatomic, retain) IBOutlet UILabel *currProjectLabel;
+@property (nonatomic, retain) NSString *currProjectTitle;
 
 -(IBAction)addWondews;
+-(IBAction)cancel;
+-(void)setProjectTitle:(NSString *)projectTitle;
 
 @end

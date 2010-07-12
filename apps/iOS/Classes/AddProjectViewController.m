@@ -18,7 +18,7 @@
     [(WondewAppDelegate *)[[UIApplication sharedApplication] delegate] createProject:project withWondews:wondews];
 }
 
--(void)viewDidAppear:(BOOL)animated {
+-(void)viewWillAppear:(BOOL)animated {
     [projectTextField setText:@""];
     [wondewTextView setText:@""];
     [projectTextField becomeFirstResponder];

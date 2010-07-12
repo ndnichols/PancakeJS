@@ -51,6 +51,13 @@
     }
     
     cell.textLabel.text = [[wondews objectAtIndex:indexPath.row] objectForKey:@"text"];
+    NSLog(@"%@", [[wondews objectAtIndex:indexPath.row] objectForKey:@"tags"]);
+    if ([[[wondews objectAtIndex:indexPath.row] objectForKey:@"tags"] objectForKey:@"done"]) {
+        cell.accessoryType = UITableViewCellAccessoryCheckmark;
+    }
+    else {
+        cell.accessoryType = UITableViewCellAccessoryNone;
+    }
     
 	// Configure the cell.
     

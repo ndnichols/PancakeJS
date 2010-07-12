@@ -11,11 +11,16 @@
 
 @implementation AddWondewViewController
 
-@synthesize wondewTextView;
+@synthesize wondewTextView, currProjectLabel, currProjectTitle;
 
 -(IBAction)addWondews {
     NSArray *wondews = [[wondewTextView text] componentsSeparatedByString:@"\n"];
     [(WondewAppDelegate *)[[UIApplication sharedApplication] delegate] createWondews:wondews];
+}
+
+-(IBAction)cancel {
+    NSLog(@"Cancelling");
+    [(WondewAppDelegate *)[[UIApplication sharedApplication] delegate] createWondews:[NSArray array]];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -31,10 +36,14 @@
     // e.g. self.myOutlet = nil;
 }
 
--(void)viewDidAppear:(BOOL)animated {
+-(void) setProjectTitle: (NSString *)projectTitle {
+    self.currProjectTitle = [NSString stringWithFormat:@"%@:", projectTitle];
+    currProjectLabel.text = currProjectTitle;
+}
+
+-(void)viewWillAppear:(BOOL)animated {
     NSLog(@"Becoming first responder!");
-//    [wondewTextField setEditable:NO];
-//    [wondewTextField setEditable:YES];
+    currProjectLabel.text = currProjectTitle;
     [wondewTextView setText:@""];
     [wondewTextView becomeFirstResponder];
     [super viewDidAppear:animated];

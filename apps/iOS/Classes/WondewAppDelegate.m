@@ -86,6 +86,7 @@
 }
 
 -(void)addWondewTapped {
+    [addWondewViewController setProjectTitle: [activeProject objectForKey:@"projectTitle"]];
     [navigationController presentModalViewController:addWondewViewController animated:YES];
 }
 
@@ -94,19 +95,21 @@
 }
 
 -(void)createWondews:(NSArray *)newWondews {
-    NSString *projectTitle = navigationController.topViewController.title;
-    NSMutableDictionary *project;
-    for (NSMutableDictionary *temp in projects) {
-        if ([[temp objectForKey:@"projectTitle"] isEqualToString:projectTitle]) {
-            project = temp;
-            break;
+    if (newWondews) {
+        NSString *projectTitle = navigationController.topViewController.title;
+        NSMutableDictionary *project;
+        for (NSMutableDictionary *temp in projects) {
+            if ([[temp objectForKey:@"projectTitle"] isEqualToString:projectTitle]) {
+                project = temp;
+                break;
+            }
         }
-    }
-    [self setActiveProject:project]; //We lose this when the modal thing comes up, don't ask
-    for (NSString *wondew in newWondews) {
-        [pancake addWondew:wondew inProject:projectTitle];
-        NSDictionary *fullWondew = [NSDictionary dictionaryWithObjectsAndKeys:wondew, @"text", nil]; //Not really full, maybe later if it matters
-        [[project objectForKey:@"wondews"] addObject:fullWondew];
+        [self setActiveProject:project]; //We lose this when the modal thing comes up, don't ask
+        for (NSString *wondew in newWondews) {
+            [pancake addWondew:wondew inProject:projectTitle];
+            NSDictionary *fullWondew = [NSDictionary dictionaryWithObjectsAndKeys:wondew, @"text", nil]; //Not really full, maybe later if it matters
+            [[project objectForKey:@"wondews"] addObject:fullWondew];
+        }
     }
     [self redrawTables];
     [navigationController dismissModalViewControllerAnimated:YES];
@@ -138,6 +141,7 @@
      Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
      Use this method to pause ongoing tasks, disable timers, and throttle down OpenGL ES frame rates. Games should use this method to pause the game.
      */
+    NSLog(@"Going away!");
 }
 
 
@@ -153,6 +157,7 @@
     /*
      Called as part of  transition from the background to the inactive state: here you can undo many of the changes made on entering the background.
      */
+    [self reloadProjects];
 }
 
 
@@ -160,6 +165,7 @@
     /*
      Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
      */
+    NSLog(@"Coming back!");
 }
 
 

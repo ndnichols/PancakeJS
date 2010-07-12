@@ -14,6 +14,7 @@
 		2892E4100DC94CBA00A64D0F /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2892E40F0DC94CBA00A64D0F /* CoreGraphics.framework */; };
 		28AD73600D9D9599002E5188 /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 28AD735F0D9D9599002E5188 /* MainWindow.xib */; };
 		28C286E10D94DF7D0034E888 /* RootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 28C286E00D94DF7D0034E888 /* RootViewController.m */; };
+		437D89FB11EAA1CF0040569B /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 437D89FA11EAA1CF0040569B /* Settings.bundle */; };
 		43BAE45F11DD538C00D36842 /* WondewIcon.png in Resources */ = {isa = PBXBuildFile; fileRef = 43BAE45E11DD538C00D36842 /* WondewIcon.png */; };
 		43C5CBAD11DBD49C00CB7EE6 /* ASINetworkQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 43C5CB9E11DBD49C00CB7EE6 /* ASINetworkQueue.m */; };
 		43C5CBAE11DBD49C00CB7EE6 /* ASIInputStream.m in Sources */ = {isa = PBXBuildFile; fileRef = 43C5CBA011DBD49C00CB7EE6 /* ASIInputStream.m */; };
@@ -54,6 +55,7 @@
 		28C286DF0D94DF7D0034E888 /* RootViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RootViewController.h; sourceTree = "<group>"; };
 		28C286E00D94DF7D0034E888 /* RootViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RootViewController.m; sourceTree = "<group>"; };
 		29B97316FDCFA39411CA2CEA /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		437D89FA11EAA1CF0040569B /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
 		43BAE45E11DD538C00D36842 /* WondewIcon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = WondewIcon.png; sourceTree = "<group>"; };
 		43C5CB9D11DBD49C00CB7EE6 /* ASIProgressDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ASIProgressDelegate.h; sourceTree = "<group>"; };
 		43C5CB9E11DBD49C00CB7EE6 /* ASINetworkQueue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ASINetworkQueue.m; sourceTree = "<group>"; };
@@ -167,6 +169,7 @@
 				43C5CBBB11DBD4E500CB7EE6 /* MobileCoreServices.framework */,
 				43C5CBBD11DBD4F100CB7EE6 /* SystemConfiguration.framework */,
 				43C5CBBF11DBD50500CB7EE6 /* libz.1.2.3.dylib */,
+				437D89FA11EAA1CF0040569B /* Settings.bundle */,
 			);
 			name = CustomTemplate;
 			sourceTree = "<group>";
@@ -310,6 +313,7 @@
 				43C5CD8711DBF6AD00CB7EE6 /* LoadingViewController.xib in Resources */,
 				43C5CDB511DCCDED00CB7EE6 /* AddProjectViewController.xib in Resources */,
 				43BAE45F11DD538C00D36842 /* WondewIcon.png in Resources */,
+				437D89FB11EAA1CF0040569B /* Settings.bundle in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

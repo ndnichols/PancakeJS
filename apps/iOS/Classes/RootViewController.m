@@ -98,8 +98,7 @@
     }
     
     cell.textLabel.text = [projectTitles objectAtIndex:indexPath.row];
-    cell.detailTextLabel.text = @"Something else";
-
+    cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
 
     return cell;
 }
